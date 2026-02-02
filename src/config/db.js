@@ -8,7 +8,7 @@ export const config = {
     password: process.env.DB_PASS || 'root', // Asegúrate de que coincida con el paso 2
     server: process.env.DB_HOST || 'localhost', 
     database: process.env.DB_NAME || 'master',
-    port: process.env.DB_PORT || 1433,
+    port: parseInt(process.env.DB_PORT) || 1433,
     options: {
         encrypt: process.env.NODE_ENV == "PROD" ? true : false,
         trustServerCertificate: true
