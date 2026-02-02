@@ -5,6 +5,7 @@ export class RankingService {
 
     static async getRanking(){
         let pool = await sql.connect(dbConfig);
+        console.log("Probando git")
         const result = await pool.request()
             .query(`
                 SELECT TOP 10 
