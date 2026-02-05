@@ -14,6 +14,7 @@ export class AuthService {
         if (checkUser.recordset.length > 0) {
             throw new Error('USER_EXISTS');
         }
+        // TODO: Ver que el email no exista ya
 
         // 2. Insertar usuario
         await pool.request()
