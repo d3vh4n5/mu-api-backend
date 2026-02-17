@@ -3,286 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Mu Online 99b</title>
+    <title>404 - Dungeon Not Found</title>
     <style>
-        body { background-color: #0b0b0b; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .register-box { background: #1a1a1a; padding: 40px; border-radius: 8px; border: 1px solid #d4af37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); width: 350px; }
-        h2 { text-align: center; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 12px; color: #aaa; }
-        input { width: 100%; padding: 10px; box-sizing: border-box; background: #333; border: 1px solid #444; color: white; border-radius: 4px; }
-        input:focus { border-color: #d4af37; outline: none; }
-        button { width: 100%; padding: 12px; background: #d4af37; border: none; color: black; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #f1c40f; }
-        #message { margin-top: 15px; text-align: center; font-size: 14px; }
-        .error { color: #ff4d4d; }
-        .success { color: #2ecc71; }
+        body {
+            background-color: #050505;
+            background-image: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            color: #d4af37; /* Oro MU */
+            font-family: 'Georgia', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Marco estilo Interfaz de Usuario (UI) */
+        .mu-container {
+            border: 4px double #5a4a32;
+            background: rgba(10, 10, 10, 0.9);
+            padding: 40px;
+            box-shadow: 0 0 20px #000, inset 0 0 50px #1a1108;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Esquinas decorativas */
+        .mu-container::before {
+            content: "✦";
+            position: absolute;
+            top: 5px; left: 5px;
+            font-size: 20px;
+            color: #8e7343;
+        }
+
+        h1 {
+            font-size: 5rem;
+            margin: 0;
+            color: #e74c3c; /* Color de HP bajo o daño */
+            text-shadow: 2px 2px 5px #000, 0 0 15px #ff0000;
+            letter-spacing: 5px;
+        }
+
+        h2 {
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #5a4a32;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #bfa161;
+        }
+
+        p {
+            color: #a5a5a5;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        /* Botones estilo MU */
+        .btn-mu {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(to bottom, #4a4a4a 0%, #222 100%);
+            border: 1px solid #8e7343;
+            padding: 10px 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px #000;
+        }
+
+        .btn-mu:hover {
+            background: linear-gradient(to bottom, #8e7343 0%, #5a4a32 100%);
+            color: #000;
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .status-bar {
+            width: 100%;
+            height: 5px;
+            background: #333;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .hp-bar {
+            width: 10%; /* Vida crítica */
+            height: 100%;
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
     </style>
 </head>
-<!-- Inicio Login -->
 <body>
 
-    <div id="login-section" class="register-box">
-    <h2>Entrar</h2>
-    <input type="text" id="login-user" placeholder="Usuario">
-    <input type="password" id="login-pass" placeholder="Contraseña">
-    <button onclick="login()">INGRESAR</button>
-</div>
-
-<div id="user-panel" class="register-box" style="display:none;">
-    <h2>Bienvenido, <span id="display-name"></span></h2>
-    <p>¡Aquí podrás repartir puntos y resetear!</p>
-    <button onclick="logout()" style="background:#c0392b; color:white;">CERRAR SESIÓN</button>
-
-
-
-    <h2>Panel de <span id="display-name"></span></h2>
-    
-    <div style="border-top: 1px solid #333; padding-top: 10px;">
-        <label>Nombre del Personaje:</label>
-        <input type="text" id="char-name" placeholder="Ej: MiGuerrero">
+    <div class="mu-container">
+        <h2>Disconnected from Map</h2>
+        <h1>404</h1>
+        <p>"Has entrado en una zona deformada por el poder de Kundun. El mapa que buscas no existe en este servidor."</p>
         
-        <button onclick="hacerReset()" style="background:#2980b9; color:white;">RESET (Nivel 400)</button>
-        
-        <hr style="border: 0.5px solid #222;">
-        
-        <label>Sumar a Fuerza:</label>
-        <div style="display:flex; gap: 5px;">
-            <input type="number" id="points-to-add" placeholder="Puntos">
-            <button onclick="sumarFuerza()">AÑADIR</button>
+        <a href="/" class="btn-mu">Regresar a Lorencia</a>
+
+        <div class="status-bar">
+            <div class="hp-bar"></div>
         </div>
+        <small style="color: #555; display: block; margin-top: 10px;">Level: ??? | Server: Maya</small>
     </div>
-    
-    <button onclick="logout()" style="margin-top:20px; background:#c0392b; color:white;">SALIR</button>
-    <div id="user-panel" class="register-box" style="display:none; width: 400px;">
-            qwe qwe
-    </div>
-</div>
-<!-- Fin Login -->
-
-
-<div class="register-box">
-    <h2>MU ONLINE 99B</h2>
-    <div id="server-status" style="text-align: center; margin-bottom: 20px;">
-        Estado: <span id="status-dot" style="color: #2ecc71;">●</span> 
-        Online: <span id="user-count">0</span>
-    </div>
-
-    <div class="ranking-box" style="background: #1a1a1a; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 20px;">
-        <h3 style="color: #d4af37; text-align: center; margin-top: 0;">TOP 10 GUERREROS</h3>
-        <table style="width: 100%; font-size: 14px; text-align: left;">
-            <thead>
-                <tr style="color: #888; border-bottom: 1px solid #333;">
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Nivel</th>
-                    <th>Resets</th>
-                </tr>
-            </thead>
-            <tbody id="ranking-body">
-                </tbody>
-        </table>
-    </div>
-    <div id="message"></div>
-    <form id="registerForm">
-        <div class="input-group">
-            <label>Usuario (Max 10)</label>
-            <input type="text" id="username" maxlength="10" required>
-        </div>
-        <div class="input-group">
-            <label>Contraseña (Max 10)</label>
-            <input type="password" id="password" maxlength="10" required>
-        </div>
-        <div class="input-group">
-            <label>Nombre Real</label>
-            <input type="text" id="name" required>
-        </div>
-        <div class="input-group">
-            <label>Correo Electrónico</label>
-            <input type="email" id="email" required>
-        </div>
-        <button type="submit">CREAR CUENTA</button>
-    </form>
-    
-    <div class="download-section" style="text-align: center; margin-top: 20px;">
-        <a href="/downloads/MuOnline99b.rar" download>
-            <button style="background: #27ae60; color: white;">DESCARGAR CLIENTE 99B</button>
-        </a>
-    </div>
-</div>
-
-<div id="admin-panel" class="register-box" style="display:none; border-color: #ff4d4d; margin-top: 20px;">
-    <h2 style="color: #ff4d4d;">PANEL DE CONTROL GM</h2>
-    
-    <label>Nombre (PJ o Usuario):</label>
-    <input type="text" id="admin-target" placeholder="Nombre...">
-    
-    <div style="display: grid; gap: 10px; margin-top: 10px;">
-        <button onclick="adminAction('HACER_GM')" style="background: #f39c12;">HACER GM (Personaje)</button>
-        <button onclick="adminAction('BANEAR_CUENTA')" style="background: #c0392b; color: white;">BANEAR CUENTA (Usuario)</button>
-        <button onclick="adminAction('DESBANEAR_CUENTA')" style="background: #27ae60; color: white;">DESBANEAR CUENTA (Usuario)</button>
-    </div>
-</div>
-
-
-<script>
-    document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const msgDiv = document.getElementById('message');
-        msgDiv.innerHTML = "Procesando...";
-
-        const data = {
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value
-        };
-
-        try {
-            const response = await fetch('http://localhost:3000/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                msgDiv.innerHTML = `<span class="success">${result.message}</span>`;
-                document.getElementById('registerForm').reset();
-            } else {
-                msgDiv.innerHTML = `<span class="error">${result.error}</span>`;
-            }
-        } catch (error) {
-            msgDiv.innerHTML = `<span class="error">No se pudo conectar con la API</span>`;
-        }
-    });
-
-    // Función para cargar el Ranking y el Status
-async function loadServerData() {
-    try {
-        // Cargar Status
-        const resStatus = await fetch('http://localhost:3000/api/status');
-        const dataStatus = await resStatus.json();
-        document.getElementById('user-count').innerText = dataStatus.online;
-
-        // Cargar Ranking
-        const resRank = await fetch('http://localhost:3000/api/ranking');
-        const dataRank = await resRank.json();
-        const tbody = document.getElementById('ranking-body');
-        
-        tbody.innerHTML = dataRank.map((player, index) => `
-            <tr style="border-bottom: 1px solid #222;">
-                <td style="padding: 8px;">${index + 1}</td>
-                <td>${player.Name}</td>
-                <td>${player.cLevel}</td>
-                <td style="color: #d4af37; font-weight: bold;">${player.Resets}</td>
-            </tr>
-        `).join('');
-
-    } catch (error) {
-        console.error("Error cargando datos del servidor", error);
-    }
-}
-
-// Ejecutar al cargar la página
-loadServerData();
-// Opcional: Actualizar cada 30 segundos
-setInterval(loadServerData, 30000);
-
-async function login() {
-    const user = document.getElementById('login-user').value;
-    const pass = document.getElementById('login-pass').value;
-
-    const res = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user, password: pass })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-        localStorage.setItem('mu_token', data.token); // Guardamos el token en el navegador
-        showPanel();
-    } else {
-        alert(data.error);
-    }
-}
-
-// function showPanel() {
-//     const token = localStorage.getItem('mu_token');
-//     if (token) {
-//         // Decodificamos el token para ver el nombre (opcional)
-//         const payload = JSON.parse(atob(token.split('.')[1]));
-//         document.getElementById('display-name').innerText = payload.name;
-        
-//         document.getElementById('login-section').style.display = 'none';
-//         document.getElementById('user-panel').style.display = 'block';
-//     }
-// }
-
-function showPanel() {
-    const token = localStorage.getItem('mu_token');
-    if (token) {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        document.getElementById('display-name').innerText = payload.name;
-        
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('user-panel').style.display = 'block';
-
-        // SI EL USUARIO ES EL ADMIN, MOSTRAR PANEL DE GM
-        if (payload.id === 'admin') {
-            document.getElementById('admin-panel').style.display = 'block';
-        }
-    }
-}
-
-async function adminAction(action) {
-    const target = document.getElementById('admin-target').value;
-    const token = localStorage.getItem('mu_token');
-
-    if(!target) return alert("Escribe un nombre.");
-
-    const res = await fetch('http://localhost:3000/api/admin/update-status', {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': token 
-        },
-        body: JSON.stringify({ targetName: target, action: action })
-    });
-
-    const data = await res.json();
-    alert(data.message || data.error);
-}
-
-function logout() {
-    localStorage.removeItem('mu_token');
-    location.reload();
-}
-
-// Al cargar la página, verificamos si ya estaba logueado
-showPanel();
-
-
-async function hacerReset() {
-    const char = document.getElementById('char-name').value;
-    const token = localStorage.getItem('mu_token');
-
-    const res = await fetch('http://localhost:3000/api/reset', {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': token 
-        },
-        body: JSON.stringify({ charName: char })
-    });
-
-    const data = await res.json();
-    alert(data.message || data.error);
-}
-</script>
 
 </body>
 </html>
