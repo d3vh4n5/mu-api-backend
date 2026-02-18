@@ -23,7 +23,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json()); // Para poder leer datos JSON en el body
 app.use(helmet());
-app.set('trust proxy', true); // Si estás detrás de un proxy (como Nginx o Heroku), esto es importante para obtener la IP real del cliente
+//app.set('trust proxy', true); // Si estás detrás de un proxy (como Nginx o Heroku), esto es importante para obtener la IP real del cliente
 
 app.use(logger);
 app.use(limitadorDescorteces); // Aplicar rate limiting
