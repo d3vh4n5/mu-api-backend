@@ -1,10 +1,52 @@
-import sql from 'mssql';
-import { config as dbConfig } from '../config/db.js';
+import { prisma } from "../lib/prisma/prisma.ts";
 
 export class AuthService {
 
     static async createUser({ username, password, name, email }) {
-        let pool = await sql.connect(dbConfig);
+        console.log('Creando usuario:', { username, name, email });
+        const existingUser = await prisma.mEMB_INFO.findFirst({
+            where: { memb___id: username }
+        });
+
+        if (existingUser) {
+            throw new Error('USER_EXISTS');
+        }
+
+        const result = await prisma.mEMB_INFO.create({
+            data: {
+                // Campos variables
+                memb___id: username,
+                memb__pwd: password,
+                memb_name: name || username,
+                mail_addr: email,
+
+                // Campos constantes obligatorios (el "relleno" del Mu Online)
+                sno__numb: '1111111111111',
+                post_code: '1234',
+                addr_info: '1',
+                addr_deta: '1',
+                fpas_ques: 'Pregunta',
+                fpas_answ: 'Respuesta',
+                job__code: '1',
+                mail_chek: '1',
+                bloc_code: '0',
+                ctl1_code: '0',
+
+                // Fechas (Prisma traduce new Date() al GETDATE() de SQL)
+                appl_days: new Date(),
+                modi_days: new Date(),
+                out__days: new Date(),
+                true_days: new Date(),
+                
+                // Si tu tabla tiene AccountLevel y otros campos nuevos de Season alta:
+                AccountLevel: 0,
+                AccountExpireDate: new Date()
+            }
+        });
+
+        console.log('Usuario creado:', result);
+
+        return result
 
         // 1. Verificar si existe
         const checkUser = await pool.request()

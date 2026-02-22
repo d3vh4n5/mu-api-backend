@@ -1,7 +1,7 @@
 {
   "name": "nueva-carpeta",
   "version": "1.0.0",
-  "description": "",
+  "description": "los files orignales del server segun Gemini pudieron haber sido creados por \"DarkHorse\" o \"Viciouz\"",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,12 +13,19 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@types/mssql": "^9.1.9",
+    "@types/node": "^25.3.0",
+    "nodemon": "^3.1.11",
+    "prisma": "^7.4.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@prisma/adapter-mssql": "^7.4.1",
+    "@prisma/client": "^7.4.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
@@ -26,5 +33,17 @@
     "mssql": "^12.2.0",
     "net": "^1.0.2",
     "node-windows": "^1.0.0-beta.8"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d3vh4n5/mu-api-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/d3vh4n5/mu-api-backend/issues"
+  },
+  "homepage": "https://github.com/d3vh4n5/mu-api-backend#readme"
 }

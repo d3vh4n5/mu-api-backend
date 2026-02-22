@@ -2,3 +2,4 @@
 node_modules
 daemon
 Client
+/src/generated/prisma

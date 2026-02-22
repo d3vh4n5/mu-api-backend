@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+x-api-key: test
+
+{ 
+    "username": "testy",
+    "password": "test",
+    "email": "test@example.com",
+    "name": "test User"
+}
