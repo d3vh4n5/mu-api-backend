@@ -1,11 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 //import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
+import { EmailService } from 'src/common/email/email.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly emailService: EmailService,
+  ) {}
+
   async create(createUserDto: CreateUserDto) {
     const { username, email } = createUserDto;
 
@@ -30,7 +35,14 @@ export class UserService {
     if (!result) {
       throw new Error('Error al crear el usuario');
     }
-    // envio correo al usuario con su contraseña
+
+    const emailResult = await this.emailService.sendWelcomeWithPasswordEmail(
+      { email: result.email, name: result.username },
+      randomNumber.toString(),
+    );
+
+    Logger.log(`Email sent to ${result.email}: ${JSON.stringify(emailResult)}`);
+
     return result;
   }
 
