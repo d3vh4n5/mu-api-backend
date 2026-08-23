@@ -1,0 +1,8 @@
+GET http://localhost:3000/api/v2/ranking
+Content-Type: application/json
+x-api-key: superSeguro
+
+### v1
+GET http://93.127.142.139/api/ranking
+Content-Type: application/json
+x-api-key: 

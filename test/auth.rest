@@ -1,0 +1,25 @@
+###
+POST http://localhost:3000/api/v2/auth/register
+Content-Type: application/json
+x-api-key: superSeguro
+
+{ 
+    "username": "testy",
+    "password": "test",
+    "email": "juanangelbasgall@hotmail.com",
+    "name": "test User"
+}
+
+###
+POST http://localhost:3000/api/v2/auth/forgot-password
+Content-Type: application/json
+x-api-key: superSeguro
+
+{ 
+    "email": "juanangelbasgall@hotmail.com"
+}
+###
+
+POST http://localhost:3000/api/v2/auth/reset-password?token=eyJ1c2VySWQiOjEsImVtYWlsIjoianVhbmFuZ2VsYmFzZ2FsbEBob3RtYWlsLmNvbSIsImV4cGlyZXNBdCI6MTc4NzQ5NzI3NDUxNiwibm9uY2UiOiI5NWZjMDZjMjRmZTc4MWJlNjY3MTVlNGNhZWJkOWVjYiJ9.LQZgvxz4Ydcaf5sSW1FT9qf613w4KNbYWmgpQh6HDHE
+Content-Type: application/json
+x-api-key: superSeguro

@@ -1,0 +1,13 @@
+GET http://localhost:3000/api/v2/health/readiness
+Content-Type: application/json
+x-api-key: superSeguro
+
+### old
+GET http://93.127.142.139/health/readiness
+Content-Type: application/json
+x-api-key: 
+
+### old
+GET http://93.127.142.139/api/status
+Content-Type: application/json
+x-api-key: 
