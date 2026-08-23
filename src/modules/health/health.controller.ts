@@ -20,16 +20,16 @@ export class HealthController {
       },
       muServer: {
         gameServer: (await this.healthService.checkPort(44405))
-          ? 'ok'
+          ? 'running'
           : 'error',
         joinServer: (await this.healthService.checkPort(44406))
-          ? 'ok'
+          ? 'running'
           : 'error',
         connectServer: (await this.healthService.checkPort(44407))
-          ? 'ok'
+          ? 'running'
           : 'error',
         dataServer: (await this.healthService.checkPort(44408))
-          ? 'ok'
+          ? 'running'
           : 'error',
       },
     };
