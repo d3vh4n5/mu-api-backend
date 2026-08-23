@@ -1,6 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { RankingService } from './ranking.service';
-import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
+import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 
 @Controller('ranking')
 @UseGuards(ApiKeyGuard)

@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { DataExportService } from './data-export.service';
-import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
+import { ApiKeyGuard } from '../../../common/guards/api-key.guard';
 
 @Controller('data-export')
 @UseGuards(ApiKeyGuard)
