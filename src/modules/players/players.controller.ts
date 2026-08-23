@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { PlayersService } from './players.service';
-import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
+import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 
 @Controller('players')
 @UseGuards(ApiKeyGuard)

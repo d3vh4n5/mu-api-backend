@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { HealthService } from './health.service';
 import { HealthResponseDto } from './dto/res/health-response.dto';
-import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
+import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 
 @Controller('health')
 @UseGuards(ApiKeyGuard)
