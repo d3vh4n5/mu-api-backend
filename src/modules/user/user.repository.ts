@@ -73,6 +73,13 @@ export class UserRepository {
     return this.prisma.mEMB_INFO.findMany();
   }
 
+  updatePassword(id: number, password: string) {
+    return this.prisma.mEMB_INFO.update({
+      where: { memb_guid: id },
+      data: { memb__pwd: password },
+    });
+  }
+
   async delete(id: number) {
     return this.prisma.mEMB_INFO.delete({ where: { memb_guid: id } });
   }

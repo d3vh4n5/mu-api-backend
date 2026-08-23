@@ -16,6 +16,10 @@ export class UserService {
     private readonly emailService: EmailService,
   ) {}
 
+  randomNumber() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
+
   async create(createUserDto: CreateUserDto) {
     const { username, email } = createUserDto;
 
@@ -30,7 +34,7 @@ export class UserService {
       throw new ConflictException('El nombre de usuario ya existe');
     }
 
-    const randomNumber = Math.floor(100000 + Math.random() * 900000);
+    const randomNumber = this.randomNumber();
 
     const result = await this.userRepository.create({
       ...createUserDto,
@@ -69,6 +73,14 @@ export class UserService {
 
   findAll() {
     return this.userRepository.findAll();
+  }
+
+  findByEmail(email: string) {
+    return this.userRepository.findByEmail(email);
+  }
+
+  updatePassword(id: number, password: string) {
+    return this.userRepository.updatePassword(id, password);
   }
 
   findOne(id: number) {

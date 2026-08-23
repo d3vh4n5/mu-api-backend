@@ -53,4 +53,19 @@ export class EmailService {
     `;
     return this.sendEmail([recipient], subject, htmlContent);
   }
+
+  async sendPasswordResetEmail(
+    recipient: EmailRecipient,
+    token: string,
+  ): Promise<SendTransacEmailResponse> {
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${encodeURIComponent(token)}`;
+    const subject = 'Recuperación de contraseña';
+    const htmlContent = `
+      <h1>Recuperación de contraseña</h1>
+      <p>Recibimos una solicitud para cambiar la contraseña de tu cuenta.</p>
+      <p><a href="${resetUrl}">Cambiar contraseña</a></p>
+      <p>Este enlace vence en 1 hora. Si no solicitaste este cambio, ignora este correo.</p>
+    `;
+    return this.sendEmail([recipient], subject, htmlContent);
+  }
 }
