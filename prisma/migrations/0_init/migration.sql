@@ -2,6 +2,9 @@ BEGIN TRY
 
 BEGIN TRAN;
 
+-- CreateSchema
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'dbo') EXEC sp_executesql N'CREATE SCHEMA [dbo];';
+
 -- CreateTable
 CREATE TABLE [dbo].[AccountCharacter] (
     [Number] INT NOT NULL IDENTITY(1,1),
@@ -329,3 +332,4 @@ END;
 THROW
 
 END CATCH
+

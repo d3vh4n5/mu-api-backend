@@ -4,6 +4,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RankingModule } from './modules/ranking/ranking.module';
 import { ConfigModule } from '@nestjs/config';
+import { DataExportModule } from './modules/tools/data-export/data-export.module';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DataExportModule,
+    SeedModule,
   ],
 })
 export class AppModule {}
