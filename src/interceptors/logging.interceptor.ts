@@ -20,7 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const { method, url } = request;
 
-    // Obtenemos la IP: primero intentamos de headers (por si usas Proxy) 
+    // Obtenemos la IP: primero intentamos de headers (por si usas Proxy)
     // y si no, la del objeto request directo.
     const ip =
       request.headers['x-forwarded-for'] ||

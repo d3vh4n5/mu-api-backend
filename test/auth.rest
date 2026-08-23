@@ -1,13 +1,11 @@
 ###
-GET http://localhost:3000
-###
-POST http://localhost:3000/api/auth/register
+POST http://localhost:3000/api/v2/auth/register
 Content-Type: application/json
-x-api-key: test
+x-api-key: superSeguro
 
 { 
     "username": "testy",
     "password": "test",
-    "email": "test@example.com",
+    "email": "juanangelbasgall@hotmail.com",
     "name": "test User"
 }

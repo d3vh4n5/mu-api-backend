@@ -1,8 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { HealthService } from './health.service';
-import { HealthResponseDto } from './dto/res/healt-response.dto';
+import { HealthResponseDto } from './dto/res/health-response.dto';
+import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
 
 @Controller('health')
+@UseGuards(ApiKeyGuard)
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 

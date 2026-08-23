@@ -68,4 +68,12 @@ export class UserRepository {
 
     return null;
   }
+
+  async findAll() {
+    return this.prisma.mEMB_INFO.findMany();
+  }
+
+  async delete(id: number) {
+    return this.prisma.mEMB_INFO.delete({ where: { memb_guid: id } });
+  }
 }

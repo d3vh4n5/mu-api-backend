@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 //import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
@@ -36,18 +41,34 @@ export class UserService {
       throw new Error('Error al crear el usuario');
     }
 
-    const emailResult = await this.emailService.sendWelcomeWithPasswordEmail(
-      { email: result.email, name: result.username },
-      randomNumber.toString(),
-    );
+    try {
+      const emailResult = await this.emailService.sendWelcomeWithPasswordEmail(
+        { email: result.email, name: result.username },
+        randomNumber.toString(),
+      );
 
-    Logger.log(`Email sent to ${result.email}: ${JSON.stringify(emailResult)}`);
+      Logger.log(
+        `Email sent to ${result.email}: ${JSON.stringify(emailResult)}`,
+      );
 
-    return result;
+      return result;
+    } catch (error) {
+      // Rollback manual
+      await this.userRepository.delete(result.id);
+
+      Logger.error(
+        `No se pudo enviar el email a ${result.email}. Usuario eliminado.`,
+        error,
+      );
+
+      throw new InternalServerErrorException(
+        'No se pudo enviar el correo de bienvenida',
+      );
+    }
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepository.findAll();
   }
 
   findOne(id: number) {

@@ -1,0 +1,14 @@
+POST http://localhost:3000/api/v2/user
+Content-Type: application/json
+x-api-key: superSeguro
+
+{
+  "username": "Juansito",
+  "name": "John Doe",
+  "email": "juanangelbasgall@hotmail.com"
+}
+
+### Get ALl
+GET http://localhost:3000/api/v2/user
+Content-Type: application/json
+x-api-key: superSeguro
