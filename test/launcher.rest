@@ -1,3 +1,8 @@
 GET http://localhost:3000/api/v2/launcher/servers
 Content-Type: application/json
 x-api-key: superSeguro
+
+### version
+GET http://localhost:3000/api/v2/launcher?version=1.1.1
+Content-Type: application/json
+x-api-key: superSeguro
