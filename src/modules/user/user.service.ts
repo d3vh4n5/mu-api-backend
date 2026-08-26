@@ -47,7 +47,7 @@ export class UserService {
 
     try {
       const emailResult = await this.emailService.sendWelcomeWithPasswordEmail(
-        { email: result.email, name: result.username },
+        { email: result.email, name: result.name },
         randomNumber.toString(),
       );
 
