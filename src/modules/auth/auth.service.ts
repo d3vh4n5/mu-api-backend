@@ -1,7 +1,15 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/common/email/email.service';
 import { UserService } from '../user/user.service';
+import { LoginDto } from './dto/login.dto';
 
 type ResetPayload = {
   userId: number;
@@ -17,7 +25,54 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
   ) {}
+
+  async login(dto: LoginDto) {
+    const credentials = await this.userService.findCredentialsByLogin(
+      dto.login,
+    );
+
+    if (!credentials || credentials.controlCode === '1') {
+      throw new UnauthorizedException('Usuario o contraseña inválidos');
+    }
+
+    const passwordMatches = credentials.password.startsWith('$2')
+      ? await bcrypt.compare(dto.password, credentials.password)
+      : dto.password === credentials.password;
+
+    if (!passwordMatches) {
+      throw new UnauthorizedException('Usuario o contraseña inválidos');
+    }
+
+    const roles = ['user'];
+    if (credentials.controlCode === '8' || credentials.controlCode === '32') {
+      roles.push('admin');
+    }
+
+    const payload = {
+      sub: credentials.id,
+      username: credentials.username,
+      name: credentials.name,
+      email: credentials.email,
+      accountLevel: credentials.accountLevel,
+      roles,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      token_type: 'Bearer',
+      expires_in: 3600,
+      user: {
+        id: credentials.id,
+        username: credentials.username,
+        name: credentials.name,
+        email: credentials.email,
+        accountLevel: credentials.accountLevel,
+        roles,
+      },
+    };
+  }
 
   async forgotPassword(email: string) {
     const user = await this.userService.findByEmail(email);

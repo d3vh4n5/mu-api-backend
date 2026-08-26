@@ -79,6 +79,10 @@ export class UserService {
     return this.userRepository.findByEmail(email);
   }
 
+  findCredentialsByLogin(login: string) {
+    return this.userRepository.findCredentialsByLogin(login);
+  }
+
   updatePassword(id: number, password: string) {
     return this.userRepository.updatePassword(id, password);
   }

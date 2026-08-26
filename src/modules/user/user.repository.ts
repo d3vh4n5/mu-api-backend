@@ -69,6 +69,24 @@ export class UserRepository {
     return null;
   }
 
+  async findCredentialsByLogin(login: string) {
+    const result = await this.prisma.mEMB_INFO.findFirst({
+      where: { OR: [{ memb___id: login }, { mail_addr: login }] },
+    });
+
+    if (!result) return null;
+
+    return {
+      id: result.memb_guid,
+      username: result.memb___id,
+      name: result.memb_name,
+      email: result.mail_addr ?? '',
+      password: result.memb__pwd,
+      accountLevel: result.AccountLevel,
+      controlCode: result.ctl1_code,
+    };
+  }
+
   async findAll() {
     return this.prisma.mEMB_INFO.findMany();
   }

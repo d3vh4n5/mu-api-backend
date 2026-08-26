@@ -1,0 +1,69 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+
+### Registrarse
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{ 
+    "username": "testy",
+    "password": "test",
+    "email": "juanangelbasgall@hotmail.com",
+    "name": "test User"
+}
+
+### Login con nombre de usuario
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "login": "hans",
+    "password": "890195"
+}
+
+### Login con correo electronico
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "login": "juanangelbasgall@gmail.com",
+    "password": "890195"
+}
+
+### Obtener el usuario y roles del token
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{login.response.body.$.access_token}}
+
+### Login con credenciales invalidas (debe responder 401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "login": "testy",
+    "password": "contrasena-incorrecta"
+}
+
+### Consultar /auth/me sin token (debe responder 401)
+GET {{baseUrl}}/auth/me
+
+
+# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#   Recuperar password
+# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+### Solicitud de contrasena olvidada
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{ 
+    "email": "juanangelbasgall@hotmail.com"
+}
+
+### Ejecucion de link de recupero de contrasenia con el token
+
+POST {{baseUrl}}/auth/reset-password?token=PEGA_AQUI_EL_TOKEN_RECIBIDO_POR_EMAIL
+Content-Type: application/json
+x-api-key: {{apiKey}}
