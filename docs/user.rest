@@ -1,6 +1,9 @@
-POST http://localhost:3000/api/v2/user
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+
+POST {{baseUrl}}/user
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}
 
 {
   "username": "Juansito",
@@ -9,6 +12,6 @@ x-api-key: superSeguro
 }
 
 ### Get ALl
-GET http://localhost:3000/api/v2/user
+GET {{baseUrl}}/user
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}

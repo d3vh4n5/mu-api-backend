@@ -1,13 +1,17 @@
-GET http://localhost:3000/api/v2/health/readiness
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@legacyBaseUrl = {{$dotenv MU_SERVER_URL}}
+
+GET {{baseUrl}}/health/readiness
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}
 
 ### old
-GET http://93.127.142.139/health/readiness
+GET {{legacyBaseUrl}}/health/readiness
 Content-Type: application/json
-x-api-key: 
+x-api-key: {{apiKey}}
 
 ### old
-GET http://93.127.142.139/api/status
+GET {{legacyBaseUrl}}/api/status
 Content-Type: application/json
-x-api-key: 
+x-api-key: {{apiKey}}

@@ -7,7 +7,7 @@ export class SeedController {
 
   @Get()
   executeSeed() {
-    const env = process.env.ENV;
+    const env = process.env.NODE_ENV;
     if (!env || env !== 'development')
       throw new Error('Seed can only be executed in development mode');
     return this.seedService.execute();

@@ -1,8 +1,12 @@
-GET http://localhost:3000/api/v2/ranking
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@legacyBaseUrl = {{$dotenv MU_SERVER_URL}}
+
+GET {{baseUrl}}/ranking
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}
 
 ### v1
-GET http://93.127.142.139/api/ranking
+GET {{legacyBaseUrl}}/api/ranking
 Content-Type: application/json
-x-api-key: 
+x-api-key: {{apiKey}}

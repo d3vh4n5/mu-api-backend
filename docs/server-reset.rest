@@ -1,0 +1,37 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+
+### Resetear datos de juego y conservar MEMB_INFO
+POST {{baseUrl}}/tools/server-reset
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "resetCharacters": true,
+  "resetMembInfo": false
+}
+
+### Resetear datos de juego y eliminar tambien MEMB_INFO
+# Accion destructiva: elimina todas las cuentas y sus credenciales.
+POST {{baseUrl}}/tools/server-reset
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "resetCharacters": true,
+  "resetMembInfo": true
+}
+
+### Ejemplo conservando personajes y borrando solo datos auxiliares
+POST {{baseUrl}}/tools/server-reset
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "resetCharacters": false,
+  "resetMembInfo": false,
+  "resetWarehouses": false,
+  "resetGuilds": false,
+  "resetRankings": true,
+  "resetSocialData": false
+}

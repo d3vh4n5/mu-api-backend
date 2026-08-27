@@ -1,3 +1,43 @@
-GET http://localhost:3000/api/v2/players/online
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@adminUsername = {{$dotenv ADMIN_USERNAME}}
+@adminPassword = {{$dotenv ADMIN_PASSWORD}}
+
+### Login de una cuenta admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
-x-api-key: superSeguro
+
+{
+	"login": "{{adminUsername}}",
+	"password": "{{adminPassword}}"
+}
+
+GET {{baseUrl}}/players/online
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+### Promover personaje a admin (requiere API key y JWT de admin)
+POST {{baseUrl}}/players/pepe/admin
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Banear personaje (requiere API key y JWT de admin)
+POST {{baseUrl}}/players/John/ban
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Normalizar personaje: quitar ban y admin (requiere API key y JWT de admin)
+POST {{baseUrl}}/players/John/normalize
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Banear cuenta (requiere API key y JWT de admin)
+POST {{baseUrl}}/players/account/hans/ban
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Desbanear y normalizar cuenta (requiere API key y JWT de admin)
+POST {{baseUrl}}/players/account/hans/normalize
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}

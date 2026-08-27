@@ -8,6 +8,7 @@ import { DataExportModule } from './modules/tools/data-export/data-export.module
 import { SeedModule } from './modules/seed/seed.module';
 import { LauncherModule } from './modules/launcher/launcher.module';
 import { PlayersModule } from './modules/players/players.module';
+import { ServerResetModule } from './modules/tools/server-reset/server-reset.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PlayersModule } from './modules/players/players.module';
     SeedModule,
     LauncherModule,
     PlayersModule,
+    ServerResetModule,
   ],
 })
 export class AppModule {}

@@ -76,7 +76,7 @@ export class EmailService {
                   <tr>
                     <td style="padding:30px 32px;background-color:#070013;border-bottom:3px solid #592bad;color:#cfb279;text-align:center;">
                       <div style="font-size:13px;letter-spacing:3px;font-weight:bold;text-transform:uppercase;">Mu Campana</div>
-                      <div style="margin-top:10px;font-size:28px;line-height:36px;font-weight:bold;">Bienvenido, guerrero</div>
+                      <div style="margin-top:10px;font-size:28px;line-height:36px;font-weight:bold;">Bienvenid@, guerrer@</div>
                     </td>
                   </tr>
                   <tr>
@@ -100,7 +100,7 @@ export class EmailService {
                   <tr>
                     <td style="padding:8px 32px 36px;">
                       <p style="margin:0;font-size:14px;line-height:23px;color:#b5a5c6;">Esta es la contraseña de tu cuenta. Guárdala en un lugar seguro y no la compartas con nadie.</p>
-                      <p style="margin:24px 0 0;font-size:15px;line-height:24px;color:#cfb279;font-weight:bold;">Nos vemos dentro, guerrero.</p>
+                      <p style="margin:24px 0 0;font-size:15px;line-height:24px;color:#cfb279;font-weight:bold;">Nos vemos dentro, guerrer@.</p>
                     </td>
                   </tr>
                   <tr>

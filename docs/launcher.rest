@@ -1,8 +1,11 @@
-GET http://localhost:3000/api/v2/launcher/servers
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+
+GET {{baseUrl}}/launcher/servers
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}
 
 ### version
-GET http://localhost:3000/api/v2/launcher?version=1.1.1
+GET {{baseUrl}}/launcher?version=1.1.1
 Content-Type: application/json
-x-api-key: superSeguro
+x-api-key: {{apiKey}}

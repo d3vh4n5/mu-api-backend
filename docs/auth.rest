@@ -19,7 +19,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "login": "hans",
+    "login": "user",
     "password": "890195"
 }
 
@@ -28,7 +28,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "login": "juanangelbasgall@gmail.com",
+    "login": "user@gmail.com",
     "password": "890195"
 }
 
