@@ -9,6 +9,7 @@ import { SeedModule } from './modules/seed/seed.module';
 import { LauncherModule } from './modules/launcher/launcher.module';
 import { PlayersModule } from './modules/players/players.module';
 import { ServerResetModule } from './modules/tools/server-reset/server-reset.module';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ServerResetModule } from './modules/tools/server-reset/server-reset.mod
     LauncherModule,
     PlayersModule,
     ServerResetModule,
+    AccountModule,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,45 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@username = {{$dotenv TEST_USERNAME}}
+@password = {{$dotenv TEST_PASSWORD}}
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+	"login": "{{username}}",
+	"password": "{{password}}"
+}
+
+### Resumen de la cuenta y sus personajes
+GET {{baseUrl}}/account
+Authorization: Bearer {{login.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Reset (la cuenta debe estar desconectada)
+POST {{baseUrl}}/account/characters/NOMBRE/reset
+Authorization: Bearer {{login.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Agregar puntos
+POST {{baseUrl}}/account/characters/NOMBRE/add-points
+Authorization: Bearer {{login.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+	"strength": 100,
+	"vitality": 50
+}
+
+### Limpiar PK
+POST {{baseUrl}}/account/characters/NOMBRE/pk-clear
+Authorization: Bearer {{login.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Desbloquear personaje (mover a Lorencia)
+POST {{baseUrl}}/account/characters/NOMBRE/unstuck
+Authorization: Bearer {{login.response.body.$.access_token}}
+x-api-key: {{apiKey}}
