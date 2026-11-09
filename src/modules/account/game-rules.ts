@@ -114,7 +114,9 @@ export function baseClassOf(classCode: number | null | undefined): BaseClass {
 
 export function classNameOf(classCode: number | null | undefined): string {
   const code = classCode ?? 0;
-  return CLASS_NAMES[code] ?? CLASS_NAMES[baseClassOf(code) * 16] ?? 'Desconocida';
+  return (
+    CLASS_NAMES[code] ?? CLASS_NAMES[baseClassOf(code) * 16] ?? 'Desconocida'
+  );
 }
 
 export function mapNameOf(mapNumber: number | null | undefined): string {

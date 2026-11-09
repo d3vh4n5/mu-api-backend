@@ -171,7 +171,7 @@ model MEMB_INFO {
   true_days         DateTime? @db.DateTime
   mail_chek         String?   @default("0", map: "DF_MEMB_INFO_mail_chek") @db.Char(1)
   bloc_code         String    @db.Char(1)
-  ctl1_code         String    @db.Char(1)
+  ctl1_code         String    @db.VarChar(2)
   AccountLevel      Int       @default(0, map: "DF_MEMB_INFO_AccountLevel")
   AccountExpireDate DateTime  @default(dbgenerated("0"), map: "DF__MEMB_INFO__Accou__07E124C1") @db.SmallDateTime
 }
@@ -297,4 +297,20 @@ model warehouse {
   EndUseDate DateTime? @db.SmallDateTime
   DbVersion  Int?      @default(0, map: "DF__warehouse__DbVer__690797E6") @db.TinyInt
   pw         Int?      @default(0, map: "DF__warehouse__pw__69FBBC1F") @db.SmallInt
+}
+
+/// Registro de acciones de administradores (panel /admin de la web)
+model AdminAuditLog {
+  Id         Int      @id(map: "PK_AdminAuditLog") @default(autoincrement())
+  CreatedAt  DateTime @default(now(), map: "DF_AdminAuditLog_CreatedAt") @db.DateTime
+  AdminUser  String   @db.VarChar(10)
+  Action     String   @db.VarChar(40)
+  TargetType String   @db.VarChar(20)
+  Target     String   @db.VarChar(50)
+  Reason     String?  @db.NVarChar(255)
+  Details    String?  @db.NVarChar(Max)
+  Ip         String?  @db.VarChar(45)
+
+  @@index([CreatedAt], map: "IX_AdminAuditLog_CreatedAt")
+  @@index([Target], map: "IX_AdminAuditLog_Target")
 }

@@ -4,6 +4,7 @@ import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminGuard } from '../../common/guards/admin.guard';
 
 @Controller('players')
 @UseGuards(ApiKeyGuard)
@@ -16,35 +17,35 @@ export class PlayersController {
   }
 
   @Post(':name/admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, AdminGuard)
   @Roles('admin')
   makeCharacterAdmin(@Param('name') name: string) {
     return this.playersService.makeCharacterAdmin(name);
   }
 
   @Post(':name/ban')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, AdminGuard)
   @Roles('admin')
   banCharacter(@Param('name') name: string) {
     return this.playersService.banCharacter(name);
   }
 
   @Post(':name/normalize')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, AdminGuard)
   @Roles('admin')
   normalizeCharacter(@Param('name') name: string) {
     return this.playersService.normalizeCharacter(name);
   }
 
   @Post('account/:username/ban')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, AdminGuard)
   @Roles('admin')
   banAccount(@Param('username') username: string) {
     return this.playersService.banAccount(username);
   }
 
   @Post('account/:username/normalize')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, AdminGuard)
   @Roles('admin')
   normalizeAccount(@Param('username') username: string) {
     return this.playersService.normalizeAccount(username);

@@ -12,7 +12,7 @@ Content-Type: application/json
 	"login": "{{adminUsername}}",
 	"password": "{{adminPassword}}"
 }
-
+###
 GET {{baseUrl}}/players/online
 Content-Type: application/json
 x-api-key: {{apiKey}}

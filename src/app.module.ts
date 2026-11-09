@@ -10,6 +10,7 @@ import { LauncherModule } from './modules/launcher/launcher.module';
 import { PlayersModule } from './modules/players/players.module';
 import { ServerResetModule } from './modules/tools/server-reset/server-reset.module';
 import { AccountModule } from './modules/account/account.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AccountModule } from './modules/account/account.module';
     PlayersModule,
     ServerResetModule,
     AccountModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

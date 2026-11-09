@@ -1,0 +1,74 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@adminUsername = {{$dotenv ADMIN_USERNAME}}
+@adminPassword = {{$dotenv ADMIN_PASSWORD}}
+
+### Login admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+	"login": "{{adminUsername}}",
+	"password": "{{adminPassword}}"
+}
+
+### Buscar cuentas y personajes
+GET {{baseUrl}}/admin/search?q=pepe
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Detalle de cuenta
+GET {{baseUrl}}/admin/accounts/pepe
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Jugadores online
+GET {{baseUrl}}/admin/online
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Auditoría (opcional: &target=pepe)
+GET {{baseUrl}}/admin/audit?limit=50
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Banear cuenta (motivo obligatorio)
+POST {{baseUrl}}/admin/accounts/pepe/ban
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{ "reason": "Uso de programas externos" }
+
+### Desbanear cuenta
+POST {{baseUrl}}/admin/accounts/pepe/unban
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{ "reason": "Apelación aceptada" }
+
+### Asignar VIP (level 0 = quitar)
+POST {{baseUrl}}/admin/accounts/pepe/vip
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{ "level": 2, "days": 30, "reason": "Donación" }
+
+### Banear / desbanear personaje
+POST {{baseUrl}}/admin/characters/Pepito/ban
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{ "reason": "Insultos" }
+
+### Dar / quitar GM (gm | ungm)
+POST {{baseUrl}}/admin/characters/Pepito/gm
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{}
