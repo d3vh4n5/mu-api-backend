@@ -4,6 +4,10 @@
 /build
 old
 
+# VPS: servicio node-windows (exe, xml y logs) y archivos del cliente MU
+/daemon
+/public
+
 # Logs
 logs
 *.log

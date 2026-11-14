@@ -4,10 +4,12 @@ import {
   ExecutionContext,
   CallHandler,
   Logger,
+  HttpException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
+import { clientIp } from '../common/security/request-utils';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -19,26 +21,28 @@ export class LoggingInterceptor implements NestInterceptor {
     const response = ctx.getResponse<Response>();
 
     const { method, url } = request;
-
-    // Obtenemos la IP: primero intentamos de headers (por si usas Proxy)
-    // y si no, la del objeto request directo.
-    const ip =
-      request.headers['x-forwarded-for'] ||
-      request.socket.remoteAddress ||
-      '0.0.0.0';
+    // req.ip respeta TRUST_PROXY; x-client-ip lo manda el BFF de Astro
+    const ip = clientIp(request);
+    const forwarded = request.headers['x-client-ip'];
+    const who = forwarded ? `${ip} (cliente ${String(forwarded)})` : ip;
 
     const now = Date.now();
 
     return next.handle().pipe(
-      tap(() => {
-        const { statusCode } = response;
-        const delay = Date.now() - now;
-
-        // Logeamos incluyendo la IP del cliente de Mu
-        this.logger.log(
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          `[IP: ${ip}] ${method} ${url} ${statusCode} - ${delay}ms`,
-        );
+      tap({
+        next: () => {
+          this.logger.log(
+            `[IP: ${who}] ${method} ${url} ${response.statusCode} - ${Date.now() - now}ms`,
+          );
+        },
+        error: (error: unknown) => {
+          const status =
+            error instanceof HttpException ? error.getStatus() : 500;
+          const log = status >= 500 ? 'error' : 'warn';
+          this.logger[log](
+            `[IP: ${who}] ${method} ${url} ${status} - ${Date.now() - now}ms`,
+          );
+        },
       }),
     );
   }

@@ -1,31 +1,42 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo Deteniendo servicio...
-net stop "api-mu"
+:: ---------------------------------------------------------------------------
+:: Actualiza la API (NestJS) en el VPS. Ejecutar como Administrador.
+::
+:: `git pull` puede modificar ESTE archivo mientras se ejecuta, y cmd lee los
+:: .bat de a pedazos. Para evitar que se rompa, primero se copia a %TEMP% y se
+:: ejecuta la copia (sin `call`, asi el original no se vuelve a leer).
+:: ---------------------------------------------------------------------------
+if /i "%~1"=="--run" goto :main
+copy /y "%~f0" "%TEMP%\update_api_run.bat" >nul
+"%TEMP%\update_api_run.bat" --run "%~dp0"
 
-:: --- CONFIGURACIÓN DE RUTAS ---
+:main
+:: Al ejecutar "como administrador" el directorio actual es System32
+cd /d "%~2"
+echo Carpeta de la API: %CD%
+
+set "SERVICE_NAME=api-mu"
 set "LOGS_DIR=.\daemon"
 set "BACKUP_BASE=.\daemon\logs_backup"
 
-:: --- GENERAR TIMESTAMP (Formato: YYYY-MM-DD_HH-MM) ---
-:: Esto extrae la fecha de forma independiente a la región del Windows
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set "dt=%%I"
-set "TIMESTAMP=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%_%dt:~8,2%-%dt:~10,2%"
+echo.
+echo Deteniendo servicio...
+net stop "%SERVICE_NAME%"
+
+:: --- TIMESTAMP YYYY-MM-DD_HH-MM (wmic esta deprecado en Windows recientes) ---
+for /f %%I in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HH-mm"') do set "TIMESTAMP=%%I"
 
 echo Respaldando archivos .log de %LOGS_DIR%...
-
-:: Crear la carpeta de destino con la fecha
 set "DEST_DIR=%BACKUP_BASE%\%TIMESTAMP%"
 
 if exist "%LOGS_DIR%" (
-    :: Verificar si hay archivos .log antes de proceder
     dir /b "%LOGS_DIR%\*.log" >nul 2>&1
     if !errorlevel! equ 0 (
         mkdir "%DEST_DIR%"
-        :: Mover solo los archivos .log
         move "%LOGS_DIR%\*.log" "%DEST_DIR%\"
-        echo Logs movidos exitosamente a %DEST_DIR%
+        echo Logs movidos a %DEST_DIR%
     ) else (
         echo No se encontraron archivos .log en %LOGS_DIR%.
     )
@@ -34,14 +45,46 @@ if exist "%LOGS_DIR%" (
 )
 
 echo.
-echo Actualizando codigo...
-git pull
-call npm install
+echo [1/5] Actualizando codigo...
+git pull || goto :error
+
+echo.
+echo [2/5] Instalando dependencias (incluye dev: hacen falta para compilar)...
+call npm ci --include=dev || goto :error
+
+echo.
+echo [3/5] Generando cliente de Prisma...
+call npx prisma generate || goto :error
+
+echo.
+echo [4/5] Aplicando migraciones pendientes...
+call npx prisma migrate deploy || goto :error
+
+echo.
+echo [5/5] Compilando...
+call npm run build || goto :error
+
+if not exist "dist\src\main.js" (
+    echo No se genero dist\src\main.js
+    goto :error
+)
 
 echo.
 echo Iniciando servicio...
-net start "api-mu"
+net start "%SERVICE_NAME%" || goto :error
 
+echo.
+echo === API actualizada correctamente ===
 pause
+exit /b
 
-REM Tmb se puede hacer presionando win + R y escribiendo "services.msc" para abrir el administrador de servicios, luego buscar el servicio "api-mu", hacer clic derecho, deteniendolo y luego volviendolo a correr.
+:error
+echo.
+echo ***************************************************************
+echo  ERROR: fallo el paso anterior. El servicio "%SERVICE_NAME%" NO
+echo  se inicio. Revisar el error, corregir y volver a ejecutar.
+echo ***************************************************************
+pause
+exit /b
+
+REM Tambien se puede manejar desde services.msc (Win + R), servicio "api-mu".

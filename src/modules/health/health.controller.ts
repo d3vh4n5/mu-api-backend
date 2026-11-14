@@ -2,6 +2,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { HealthService } from './health.service';
 import { HealthResponseDto } from './dto/res/health-response.dto';
 import { ApiKeyGuard } from '../../common/guards/api-key.guard';
+import { CONFIG } from '../../constants/config';
 
 @Controller('health')
 @UseGuards(ApiKeyGuard)
@@ -9,31 +10,45 @@ export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
   @Get('/readiness')
-  async getStatus() {
-    const resp: HealthResponseDto = {
+  async getStatus(): Promise<HealthResponseDto> {
+    const ports = CONFIG.MU_PORTS;
+    const portStatus = async (port: number) =>
+      (await this.healthService.checkPort(port)) ? 'running' : 'stopped';
+
+    const [
+      gameDaemon,
+      joinDaemon,
+      connectDaemon,
+      dataDaemon,
+      connectPort,
+      joinPort,
+      gamePort,
+      dataPort,
+    ] = await Promise.all([
+      this.healthService.checkService('GameServer'),
+      this.healthService.checkService('JoinServer'),
+      this.healthService.checkService('ConnectServer'),
+      this.healthService.checkService('DataServer'),
+      portStatus(ports.connectServer),
+      portStatus(ports.joinServer),
+      portStatus(ports.gameServer),
+      portStatus(ports.dataServer),
+    ]);
+
+    return {
       api: 'ok',
       muServerDaemons: {
-        gameServer: await this.healthService.checkService('GameServer'),
-        joinServer: await this.healthService.checkService('JoinServer'),
-        connectServer: await this.healthService.checkService('ConnectServer'),
-        dataServer: await this.healthService.checkService('DataServer'),
+        gameServer: gameDaemon,
+        joinServer: joinDaemon,
+        connectServer: connectDaemon,
+        dataServer: dataDaemon,
       },
       muServer: {
-        gameServer: (await this.healthService.checkPort(44405))
-          ? 'running'
-          : 'error',
-        joinServer: (await this.healthService.checkPort(44406))
-          ? 'running'
-          : 'error',
-        connectServer: (await this.healthService.checkPort(44407))
-          ? 'running'
-          : 'error',
-        dataServer: (await this.healthService.checkPort(44408))
-          ? 'running'
-          : 'error',
+        connectServer: connectPort,
+        joinServer: joinPort,
+        gameServer: gamePort,
+        dataServer: dataPort,
       },
     };
-
-    return resp;
   }
 }
