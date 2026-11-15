@@ -6,7 +6,7 @@ import { manifest } from './data/manifest';
 export class LauncherService {
   constructor(private readonly healthService: HealthService) {}
 
-  private readonly currentVersion = '1.2.5';
+  private readonly currentVersion = '1.2.7';
 
   async getServers() {
     const status = await this.healthService.checkService('GameServer');
@@ -56,7 +56,7 @@ export class LauncherService {
         '/downloads/Mu99bClassic/Client/launcher.exe',
       updaterUrl:
         process.env.MU_SERVER_URL +
-        '/downloads/Mu99bClassic/Client/updater.exe',
+        '/downloads/Mu99bClassic/Client/Data/Launcher/updater.exe',
       version: this.currentVersion,
       currentVersion: this.currentVersion,
       clientVersion: version ?? null,

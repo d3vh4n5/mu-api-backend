@@ -1,12 +1,7 @@
 export const manifest = {
-  "version": "1.0.1",
-  "file_count": 4032,
+  "version": "1.0.0",
+  "file_count": 4029,
   "files": [
-    // {
-    //   "path": "launcher.exe",
-    //   "size": 23206868,
-    //   "sha256": "180c1339975dca8d3c498fed2477dfbf1def56182e5784479542545e516fb5db"
-    // },
     {
       "path": "Main.dll",
       "size": 1296896,
@@ -28,11 +23,6 @@ export const manifest = {
       "sha256": "1221a09484964a6f38af5e34ee292b9afefccb3dc6e55435fd3aaf7c235d9067"
     },
     {
-      "path": "MuError.dmp",
-      "size": 1656,
-      "sha256": "91d38b8e8e283086095e811c329f80b46b18a8bfb116c057e242be9e2b65e091"
-    },
-    {
       "path": "ogg.dll",
       "size": 53248,
       "sha256": "e6a3deeebe9de112a9a0c0c456a15e7f6cbae0af5d859932bdc5ff1ad9cfa60e"
@@ -40,12 +30,7 @@ export const manifest = {
     {
       "path": "ServerInfo.sse",
       "size": 555272,
-      "sha256": "47449552fc4a4c4af85d869c6ffa6997abb3240ea10917b51702040b2475c09f"
-    },
-    {
-      "path": "updater.exe",
-      "size": 19862751,
-      "sha256": "bf0fffe17b9315962c17ffa48231177d55a6b502a7e07823acc347ca2e613434"
+      "sha256": "da2ab3af585ea215ca9dcc6b3508f9cc7b7819032e47bb8e7b36e1e5a8d84ef7"
     },
     {
       "path": "vorbisfile.dll",
@@ -3781,6 +3766,11 @@ export const manifest = {
       "path": "Data/Item/yellow_jewel.OZJ",
       "size": 4941,
       "sha256": "a5c1fbe2798fbecc89661b61eb1b190cb124978bd74eb735e85d7dd1c3d72783"
+    },
+    {
+      "path": "Data/Launcher/updater.exe",
+      "size": 19829506,
+      "sha256": "cd2f87cc0c4f6157409da922c775673a8a910ab7374cb7944053c113f915110b"
     },
     {
       "path": "Data/Local/Filter.bmd",
@@ -18783,11 +18773,6 @@ export const manifest = {
       "sha256": "7be4c705bc410844871e49b2d1303027cf29136b646b8d69e8f50c25605fafd6"
     },
     {
-      "path": "Data/temp/new_launcher.exe",
-      "size": 18681445,
-      "sha256": "b95d7a26a98e2340d38c446e0bc5fed1070ab21cbe2823ee551d1aea68ae742d"
-    },
-    {
       "path": "Data/World1/EncTerrain1.att",
       "size": 65540,
       "sha256": "281a25da3e57b493445704aed0cae8a1dcfe26b3348cec03cc719df6ab2ba3e6"
@@ -20163,4 +20148,4 @@ export const manifest = {
       "sha256": "0ba843337bae95610527cc66b9095747bf8be58665efaeb72242b0addb56045e"
     }
   ]
-}
+};
