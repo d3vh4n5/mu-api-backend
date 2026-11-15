@@ -1,6 +1,7 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
 
+### Crear cuenta (igual que /auth/register: cuenta REAL + mail)
 POST {{baseUrl}}/user
 Content-Type: application/json
 x-api-key: {{apiKey}}
@@ -8,10 +9,10 @@ x-api-key: {{apiKey}}
 {
   "username": "Juansito",
   "name": "John Doe",
-  "email": "juanangelbasgall@hotmail.com"
+  "email": "{{$dotenv TEST_EMAIL}}"
 }
 
-### Get ALl
+### Listar TODAS las cuentas
+# ⚠️ Devuelve MEMB_INFO completo, contraseñas incluidas.
 GET {{baseUrl}}/user
-Content-Type: application/json
 x-api-key: {{apiKey}}

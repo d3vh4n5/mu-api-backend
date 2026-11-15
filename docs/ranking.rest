@@ -1,12 +1,6 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
-@legacyBaseUrl = {{$dotenv MU_SERVER_URL}}
 
+### Top 10 por resets y nivel
 GET {{baseUrl}}/ranking
-Content-Type: application/json
-x-api-key: {{apiKey}}
-
-### v1
-GET {{legacyBaseUrl}}/api/ranking
-Content-Type: application/json
 x-api-key: {{apiKey}}

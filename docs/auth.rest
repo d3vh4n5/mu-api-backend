@@ -1,69 +1,71 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
+@username = {{$dotenv TEST_USERNAME}}
+@password = {{$dotenv TEST_PASSWORD}}
+@email = {{$dotenv TEST_EMAIL}}
+
+# Rate limit por IP (sin x-client-ip): login 10/min, register y
+# forgot-password 5 cada 15 min.
 
 ### Registrarse
+# ⚠️ Crea una cuenta REAL y manda un mail con la contraseña generada.
+# username y name: máximo 10 caracteres.
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 x-api-key: {{apiKey}}
 
-{ 
+{
     "username": "testy",
-    "password": "test",
-    "email": "juanangelbasgall@hotmail.com",
-    "name": "test User"
+    "name": "test",
+    "email": "{{email}}"
 }
 
-### Login con nombre de usuario
+### Login (acepta usuario o email)
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "login": "user",
-    "password": "890195"
+    "login": "{{username}}",
+    "password": "{{password}}"
 }
 
-### Login con correo electronico
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-    "login": "user@gmail.com",
-    "password": "890195"
-}
-
-### Obtener el usuario y roles del token
+### Usuario y roles del token
 GET {{baseUrl}}/auth/me
 Authorization: Bearer {{login.response.body.$.access_token}}
 
-### Login con credenciales invalidas (debe responder 401)
+### Login con credenciales inválidas (debe responder 401)
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "login": "testy",
+    "login": "{{username}}",
     "password": "contrasena-incorrecta"
 }
 
-### Consultar /auth/me sin token (debe responder 401)
+### /auth/me sin token (debe responder 401)
 GET {{baseUrl}}/auth/me
 
 
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#   Recuperar password
+#   Recuperar contraseña
 # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-### Solicitud de contrasena olvidada
+### Pedir mail de recuperación (el link apunta a FRONTEND_URL)
 POST {{baseUrl}}/auth/forgot-password
 Content-Type: application/json
 x-api-key: {{apiKey}}
 
-{ 
-    "email": "juanangelbasgall@hotmail.com"
+{
+    "email": "{{email}}"
 }
 
-### Ejecucion de link de recupero de contrasenia con el token
-
-POST {{baseUrl}}/auth/reset-password?token=PEGA_AQUI_EL_TOKEN_RECIBIDO_POR_EMAIL
+### Aplicar el reset con el token del link del mail
+# ⚠️ Cambia la contraseña de la cuenta por una nueva generada.
+POST {{baseUrl}}/auth/reset-password
 Content-Type: application/json
 x-api-key: {{apiKey}}
+
+{
+    "token": "PEGA_AQUI_EL_TOKEN_DEL_LINK"
+}

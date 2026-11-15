@@ -1,6 +1,8 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
 
+### Exportar MEMB_INFO, AccountCharacter y Character a JSON
+# Escribe los archivos en prisma/seed-data/ de la máquina donde corre la API
+# (en el VPS: C:\API\prisma\seed-data). No devuelve los datos.
 GET {{baseUrl}}/data-export
-Content-Type: application/json
 x-api-key: {{apiKey}}

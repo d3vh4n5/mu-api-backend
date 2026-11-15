@@ -3,6 +3,9 @@
 @adminUsername = {{$dotenv ADMIN_USERNAME}}
 @adminPassword = {{$dotenv ADMIN_PASSWORD}}
 
+# Las acciones de esta sección también existen en /admin (admin.rest),
+# que además las registra en la auditoría. Preferí admin.rest.
+
 ### Login de una cuenta admin
 # @name adminLogin
 POST {{baseUrl}}/auth/login
@@ -12,9 +15,8 @@ Content-Type: application/json
 	"login": "{{adminUsername}}",
 	"password": "{{adminPassword}}"
 }
-###
+### Jugadores conectados (MEMB_STAT.ConnectStat = 1)
 GET {{baseUrl}}/players/online
-Content-Type: application/json
 x-api-key: {{apiKey}}
 
 ### Promover personaje a admin (requiere API key y JWT de admin)

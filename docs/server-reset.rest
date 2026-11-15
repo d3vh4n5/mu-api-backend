@@ -1,6 +1,9 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
 
+# El endpoint está deshabilitado en el código: responde "command disabled"
+# sin tocar la base. Para habilitarlo hay que editar server-reset.controller.ts.
+
 ### Resetear datos de juego y conservar MEMB_INFO
 POST {{baseUrl}}/tools/server-reset
 Content-Type: application/json

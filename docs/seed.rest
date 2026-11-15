@@ -1,6 +1,8 @@
 @baseUrl = {{$dotenv API_BASE_URL}}
 @apiKey = {{$dotenv SECRET_API_KEY}}
 
+### Seed (SOLO desarrollo)
+# ⚠️ BORRA MEMB_INFO, Character y AccountCharacter y carga prisma/seed-data.
+# Con NODE_ENV distinto de development la ruta no existe: debe responder 404.
 GET {{baseUrl}}/seed
-Content-Type: application/json
 x-api-key: {{apiKey}}
