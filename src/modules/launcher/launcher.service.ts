@@ -53,6 +53,10 @@ export class LauncherService {
    * La versión publicada sale de los metadatos del launcher.exe que está en
    * /downloads: subir un exe nuevo alcanza para publicar una versión.
    * Si el exe no está o no tiene versión, nadie actualiza.
+   *
+   * Rollback: con LAUNCHER_ALLOW_DOWNGRADE=true se actualiza a cualquier versión
+   * DISTINTA de la publicada (también hacia atrás). Así, para deshacer una versión
+   * rota alcanza con volver a subir el launcher.exe anterior.
    */
   async getLauncherInfo(version: string) {
     const [launcher, updater] = await Promise.all([
@@ -67,10 +71,13 @@ export class LauncherService {
       this.logger.warn(`${LAUNCHER_REL_PATH} no tiene metadatos de versión`);
     }
 
+    const allowDowngrade = process.env.LAUNCHER_ALLOW_DOWNGRADE === 'true';
     const needUpdate =
       !!version &&
       !!currentVersion &&
-      this.isVersionGreater(currentVersion, version);
+      (allowDowngrade
+        ? this.compareVersions(currentVersion, version) !== 0
+        : this.compareVersions(currentVersion, version) > 0);
 
     return {
       name: 'launcher.exe',
@@ -90,7 +97,8 @@ export class LauncherService {
     };
   }
 
-  private isVersionGreater(version: string, otherVersion: string) {
+  /** >0 si version es mayor, <0 si es menor, 0 si son iguales ("1.2" == "1.2.0"). */
+  private compareVersions(version: string, otherVersion: string) {
     const currentParts = this.parseVersion(version);
     const otherParts = this.parseVersion(otherVersion);
     const length = Math.max(currentParts.length, otherParts.length);
@@ -100,11 +108,11 @@ export class LauncherService {
       const otherPart = otherParts[index] ?? 0;
 
       if (currentPart !== otherPart) {
-        return currentPart > otherPart;
+        return currentPart - otherPart;
       }
     }
 
-    return false;
+    return 0;
   }
 
   private parseVersion(version: string) {
