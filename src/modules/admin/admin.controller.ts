@@ -14,6 +14,7 @@ import { ApiKeyGuard } from '../../common/guards/api-key.guard';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { AdminGuard } from '../../common/guards/admin.guard';
 import { AdminActor, AdminService } from './admin.service';
+import { UpdatesService } from './updates.service';
 import {
   AuditQueryDto,
   OptionalReasonDto,
@@ -34,7 +35,16 @@ type AdminRequest = {
 @Controller('admin')
 @UseGuards(ApiKeyGuard, JwtAuthGuard, AdminGuard)
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly updatesService: UpdatesService,
+  ) {}
+
+  /** Launcher, updater y manifest publicados en /downloads (solo lectura). */
+  @Get('updates')
+  updates() {
+    return this.updatesService.status();
+  }
 
   @Get('search')
   search(@Query() query: SearchDto) {

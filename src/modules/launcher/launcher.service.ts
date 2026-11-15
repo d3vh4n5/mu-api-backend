@@ -4,10 +4,7 @@ import { HealthService } from '../health/health.service';
 import { getDownloadsDir } from '../../downloads/setup-downloads';
 import { manifest } from './data/manifest';
 import { getPublishedFileInfo } from './published-file';
-
-/** Rutas dentro de /downloads (las mismas que launcherUrl / updaterUrl). */
-const LAUNCHER_REL_PATH = 'Mu99bClassic/Client/launcher.exe';
-const UPDATER_REL_PATH = 'Mu99bClassic/Client/Data/Launcher/updater.exe';
+import { LAUNCHER_REL_PATH, UPDATER_REL_PATH } from './paths';
 
 @Injectable()
 export class LauncherService {
