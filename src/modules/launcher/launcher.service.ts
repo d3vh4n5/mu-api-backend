@@ -5,8 +5,9 @@ import { getDownloadsDir } from '../../downloads/setup-downloads';
 import { manifest } from './data/manifest';
 import { getPublishedFileInfo } from './published-file';
 
-/** Ruta del launcher dentro de /downloads (la misma que launcherUrl). */
+/** Rutas dentro de /downloads (las mismas que launcherUrl / updaterUrl). */
 const LAUNCHER_REL_PATH = 'Mu99bClassic/Client/launcher.exe';
+const UPDATER_REL_PATH = 'Mu99bClassic/Client/Data/Launcher/updater.exe';
 
 @Injectable()
 export class LauncherService {
@@ -54,9 +55,10 @@ export class LauncherService {
    * Si el exe no está o no tiene versión, nadie actualiza.
    */
   async getLauncherInfo(version: string) {
-    const launcher = await getPublishedFileInfo(
-      join(getDownloadsDir(), LAUNCHER_REL_PATH),
-    );
+    const [launcher, updater] = await Promise.all([
+      getPublishedFileInfo(join(getDownloadsDir(), LAUNCHER_REL_PATH)),
+      getPublishedFileInfo(join(getDownloadsDir(), UPDATER_REL_PATH)),
+    ]);
     const currentVersion = launcher?.version ?? null;
 
     if (!launcher) {
@@ -76,9 +78,11 @@ export class LauncherService {
       frontEndUrl: 'https://mu-front.vercel.app',
       launcherUrl:
         process.env.MU_SERVER_URL + '/downloads/' + LAUNCHER_REL_PATH,
-      updaterUrl:
-        process.env.MU_SERVER_URL +
-        '/downloads/Mu99bClassic/Client/Data/Launcher/updater.exe',
+      launcherSha256: launcher?.sha256 ?? null,
+      launcherSize: launcher?.size ?? null,
+      updaterUrl: process.env.MU_SERVER_URL + '/downloads/' + UPDATER_REL_PATH,
+      updaterSha256: updater?.sha256 ?? null,
+      updaterSize: updater?.size ?? null,
       version: currentVersion,
       currentVersion,
       clientVersion: version ?? null,

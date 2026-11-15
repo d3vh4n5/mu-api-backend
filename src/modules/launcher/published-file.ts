@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { readFile, stat } from 'fs/promises';
 import { Logger } from '@nestjs/common';
 import { readPeFileVersion } from './pe-version';
@@ -8,6 +9,8 @@ export interface PublishedFileInfo {
   mtimeMs: number;
   /** FileVersion del exe, o null si no tiene metadatos de versión */
   version: string | null;
+  /** sha256 en hex: el launcher lo compara antes de instalar lo que descargó */
+  sha256: string;
 }
 
 const logger = new Logger('PublishedFile');
@@ -39,8 +42,11 @@ export async function getPublishedFileInfo(
     size: st.size,
     mtimeMs: st.mtimeMs,
     version: readPeFileVersion(buf),
+    sha256: createHash('sha256').update(buf).digest('hex'),
   };
   cache.set(path, info);
-  logger.log(`Leído ${path}: version=${info.version}, size=${info.size}`);
+  logger.log(
+    `Leído ${path}: version=${info.version}, size=${info.size}, sha256=${info.sha256}`,
+  );
   return info;
 }
