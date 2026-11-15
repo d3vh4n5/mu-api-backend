@@ -22,13 +22,18 @@ import { manifest } from '../modules/launcher/data/manifest';
  * (la key que viaja dentro del launcher) o SECRET_API_KEY.
  * DOWNLOADS_REQUIRE_KEY=false lo deja público.
  */
+/** Carpeta física que se sirve en /downloads (PUBLIC_DIR/downloads). */
+export function getDownloadsDir(): string {
+  const publicDir = process.env.PUBLIC_DIR || join(process.cwd(), 'public');
+  return join(publicDir, 'downloads');
+}
+
 export function setupDownloads(
   app: NestExpressApplication,
   blocklist: IpBlocklistService,
 ) {
   const logger = new Logger('Downloads');
-  const publicDir = process.env.PUBLIC_DIR || join(process.cwd(), 'public');
-  const downloadsDir = join(publicDir, 'downloads');
+  const downloadsDir = getDownloadsDir();
   const requireKey = process.env.DOWNLOADS_REQUIRE_KEY !== 'false';
 
   if (!existsSync(downloadsDir)) {

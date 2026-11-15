@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { join } from 'path';
 import { HealthService } from '../health/health.service';
+import { getDownloadsDir } from '../../downloads/setup-downloads';
 import { manifest } from './data/manifest';
+import { getPublishedFileInfo } from './published-file';
+
+/** Ruta del launcher dentro de /downloads (la misma que launcherUrl). */
+const LAUNCHER_REL_PATH = 'Mu99bClassic/Client/launcher.exe';
 
 @Injectable()
 export class LauncherService {
-  constructor(private readonly healthService: HealthService) {}
+  private readonly logger = new Logger(LauncherService.name);
 
-  private readonly currentVersion = '1.2.7';
+  constructor(private readonly healthService: HealthService) {}
 
   async getServers() {
     const status = await this.healthService.checkService('GameServer');
@@ -42,23 +48,39 @@ export class LauncherService {
     return manifest;
   }
 
-  getLauncherInfo(version: string) {
-    const needUpdate = version
-      ? this.isVersionGreater(this.currentVersion, version)
-      : false;
+  /**
+   * La versión publicada sale de los metadatos del launcher.exe que está en
+   * /downloads: subir un exe nuevo alcanza para publicar una versión.
+   * Si el exe no está o no tiene versión, nadie actualiza.
+   */
+  async getLauncherInfo(version: string) {
+    const launcher = await getPublishedFileInfo(
+      join(getDownloadsDir(), LAUNCHER_REL_PATH),
+    );
+    const currentVersion = launcher?.version ?? null;
+
+    if (!launcher) {
+      this.logger.warn(`No existe ${LAUNCHER_REL_PATH} en downloads`);
+    } else if (!currentVersion) {
+      this.logger.warn(`${LAUNCHER_REL_PATH} no tiene metadatos de versión`);
+    }
+
+    const needUpdate =
+      !!version &&
+      !!currentVersion &&
+      this.isVersionGreater(currentVersion, version);
 
     return {
       name: 'launcher.exe',
       registerUrl: 'https://mu-front.vercel.app/register',
       frontEndUrl: 'https://mu-front.vercel.app',
       launcherUrl:
-        process.env.MU_SERVER_URL +
-        '/downloads/Mu99bClassic/Client/launcher.exe',
+        process.env.MU_SERVER_URL + '/downloads/' + LAUNCHER_REL_PATH,
       updaterUrl:
         process.env.MU_SERVER_URL +
         '/downloads/Mu99bClassic/Client/Data/Launcher/updater.exe',
-      version: this.currentVersion,
-      currentVersion: this.currentVersion,
+      version: currentVersion,
+      currentVersion,
       clientVersion: version ?? null,
       needUpdate,
     };
