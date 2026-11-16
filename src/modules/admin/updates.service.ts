@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { readFile, stat } from 'fs/promises';
 import { join } from 'path';
 import { getDownloadsDir } from '../../downloads/setup-downloads';
-import { manifest as embeddedManifest } from '../launcher/data/manifest';
 import {
   CLIENT_REL_DIR,
   LAUNCHER_REL_PATH,
@@ -54,16 +53,16 @@ export class UpdatesService {
   }
 
   /**
-   * El manifest de disco tiene prioridad (lo sirve /downloads); si no está, el
-   * launcher recibe el embebido en la API. Para cada archivo se comprueba que
-   * exista en Client/ con el tamaño declarado: si falta, el launcher lo saltea;
-   * si el tamaño no coincide, lo vuelve a bajar en cada verificación.
+   * Solo existe el manifest de disco (lo sirve /downloads): si falta, el
+   * launcher recibe un 404. Para cada archivo se comprueba que exista en
+   * Client/ con el tamaño declarado: si falta, el launcher lo saltea; si el
+   * tamaño no coincide, lo vuelve a bajar en cada verificación.
    */
   private async manifestStatus(downloadsDir: string) {
     const diskPath = join(downloadsDir, MANIFEST_REL_PATH);
-    let source: 'disk' | 'embedded' = 'embedded';
+    let source: 'disk' | 'missing' = 'missing';
     let modifiedAt: string | null = null;
-    let data: Manifest = embeddedManifest as Manifest;
+    let data: Manifest = { files: [] };
     let error: string | null = null;
 
     try {
@@ -72,10 +71,11 @@ export class UpdatesService {
       modifiedAt = st.mtime.toISOString();
       data = JSON.parse(await readFile(diskPath, 'utf8')) as Manifest;
     } catch (e) {
-      if ((e as NodeJS.ErrnoException).code !== 'ENOENT') {
-        error = `No se pudo leer ${MANIFEST_REL_PATH}: ${(e as Error).message}`;
-        data = { files: [] };
-      }
+      error =
+        (e as NodeJS.ErrnoException).code === 'ENOENT'
+          ? 'manifest.json no publicado'
+          : `No se pudo leer ${MANIFEST_REL_PATH}: ${(e as Error).message}`;
+      data = { files: [] };
     }
 
     const files = Array.isArray(data.files) ? data.files : [];

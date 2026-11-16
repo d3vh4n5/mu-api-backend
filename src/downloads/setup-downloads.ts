@@ -9,7 +9,6 @@ import {
   headerValue,
   matchesAnyKey,
 } from '../common/security/request-utils';
-import { manifest } from '../modules/launcher/data/manifest';
 
 /**
  * Sirve `public/downloads` en `/downloads` (fuera del prefijo /api/v2), como
@@ -22,10 +21,14 @@ import { manifest } from '../modules/launcher/data/manifest';
  * (la key que viaja dentro del launcher) o SECRET_API_KEY.
  * DOWNLOADS_REQUIRE_KEY=false lo deja público.
  */
+/** PUBLIC_DIR, o `public/` en la carpeta de la API. */
+export function getPublicDir(): string {
+  return process.env.PUBLIC_DIR || join(process.cwd(), 'public');
+}
+
 /** Carpeta física que se sirve en /downloads (PUBLIC_DIR/downloads). */
 export function getDownloadsDir(): string {
-  const publicDir = process.env.PUBLIC_DIR || join(process.cwd(), 'public');
-  return join(publicDir, 'downloads');
+  return join(getPublicDir(), 'downloads');
 }
 
 export function setupDownloads(
@@ -76,14 +79,18 @@ export function setupDownloads(
     fallthrough: true,
   });
 
-  // Si public/downloads/Mu99bClassic/manifest.json no existe en disco
-  // (git pull lo borra del repo), se sirve el manifest embebido en la API.
+  // Solo se llega acá si useStaticAssets no encontró el archivo en disco. No hay
+  // manifest de respaldo: un manifest viejo haría que los launchers "verifiquen"
+  // contra algo que no es lo publicado. Se publica con Client Tools.
   app
     .getHttpAdapter()
     .get(
       '/downloads/Mu99bClassic/manifest.json',
       (_req: Request, res: Response) => {
-        res.json(manifest);
+        logger.warn('manifest.json no publicado en downloads');
+        res
+          .status(404)
+          .json({ statusCode: 404, message: 'manifest.json no publicado' });
       },
     );
 }
