@@ -1,0 +1,65 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+@adminUsername = {{$dotenv ADMIN_USERNAME}}
+@adminPassword = {{$dotenv ADMIN_PASSWORD}}
+
+### Login admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+	"login": "{{adminUsername}}",
+	"password": "{{adminPassword}}"
+}
+
+### Crear noticia (Content en Markdown)
+# @name created
+POST {{baseUrl}}/admin/news
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+	"title": "Castle Siege este sábado",
+	"summary": "Sábado 21 hs. Premios para el gremio ganador.",
+	"content": "## Castle Siege\n\nEl **sábado a las 21 hs** se juega el Castle Siege.\n\n- Premio: 500 créditos\n- Inscripción hasta el viernes",
+	"category": "evento",
+	"published": true,
+	"pinned": true
+}
+
+### Editar (borrador: deja de verse en la web y el launcher)
+PUT {{baseUrl}}/admin/news/{{created.response.body.$.id}}
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+	"title": "Castle Siege este sábado",
+	"content": "Texto corregido",
+	"category": "evento",
+	"published": false,
+	"pinned": false
+}
+
+### Listado admin (incluye borradores y programadas)
+GET {{baseUrl}}/admin/news
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Borrar
+DELETE {{baseUrl}}/admin/news/{{created.response.body.$.id}}
+Authorization: Bearer {{adminLogin.response.body.$.access_token}}
+x-api-key: {{apiKey}}
+
+### Públicas para la web (solo publicadas con fecha cumplida)
+GET {{baseUrl}}/news?page=1&limit=10
+x-api-key: {{apiKey}}
+
+### Una noticia (404 si no está publicada)
+GET {{baseUrl}}/news/1
+x-api-key: {{apiKey}}
+
+### Resumidas para el launcher (sin key, cache de 1 minuto)
+GET {{baseUrl}}/launcher/news

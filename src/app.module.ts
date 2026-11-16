@@ -14,6 +14,7 @@ import { PlayersModule } from './modules/players/players.module';
 import { ServerResetModule } from './modules/tools/server-reset/server-reset.module';
 import { AccountModule } from './modules/account/account.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { NewsModule } from './modules/news/news.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SecurityModule } from './common/security/security.module';
 import { AppThrottlerGuard } from './common/security/app-throttler.guard';
@@ -46,6 +47,7 @@ const devOnlyModules =
     ServerResetModule,
     AccountModule,
     AdminModule,
+    NewsModule,
     ...devOnlyModules,
   ],
   providers: [{ provide: APP_GUARD, useClass: AppThrottlerGuard }],

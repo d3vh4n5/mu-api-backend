@@ -314,3 +314,25 @@ model AdminAuditLog {
   @@index([CreatedAt], map: "IX_AdminAuditLog_CreatedAt")
   @@index([Target], map: "IX_AdminAuditLog_Target")
 }
+
+/// Noticias del servidor: las carga el admin desde la web y se muestran en la
+/// web (/news) y resumidas en el launcher. Content está en Markdown.
+model News {
+  Id          Int       @id(map: "PK_News") @default(autoincrement())
+  Title       String    @db.NVarChar(120)
+  Summary     String?   @db.NVarChar(300)
+  Content     String    @db.NVarChar(Max)
+  /// novedad | evento | mantenimiento
+  Category    String    @default("novedad", map: "DF_News_Category") @db.VarChar(20)
+  ImageUrl    String?   @db.NVarChar(500)
+  Published   Boolean   @default(false, map: "DF_News_Published")
+  Pinned      Boolean   @default(false, map: "DF_News_Pinned")
+  /// Fecha visible. Una noticia publicada con fecha futura no se muestra hasta esa fecha.
+  PublishedAt DateTime? @db.DateTime
+  CreatedAt   DateTime  @default(now(), map: "DF_News_CreatedAt") @db.DateTime
+  UpdatedAt   DateTime  @default(now(), map: "DF_News_UpdatedAt") @db.DateTime
+  CreatedBy   String    @db.VarChar(10)
+  UpdatedBy   String?   @db.VarChar(10)
+
+  @@index([Published, PublishedAt], map: "IX_News_Published_PublishedAt")
+}

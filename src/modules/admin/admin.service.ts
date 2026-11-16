@@ -12,21 +12,17 @@ import {
   mapNameOf,
 } from '../account/game-rules';
 import { SetVipDto } from './dto/admin.dto';
+import {
+  AdminActor,
+  AuditEntry,
+  writeAdminAudit,
+} from '../../common/audit/admin-audit';
 
-/** Quién ejecuta la acción (sale del JWT) y desde qué IP. */
-export type AdminActor = { username: string; ip?: string };
+export type { AdminActor } from '../../common/audit/admin-audit';
 
 const CHARACTER_BANNED = 1;
 const CHARACTER_GM = 32;
 const CHARACTER_NORMAL = 0;
-
-type AuditEntry = {
-  action: string;
-  targetType: 'account' | 'character';
-  target: string;
-  reason?: string;
-  details?: Record<string, unknown>;
-};
 
 @Injectable()
 export class AdminService {
@@ -417,17 +413,7 @@ export class AdminService {
   }
 
   private log(actor: AdminActor, entry: AuditEntry) {
-    return this.prisma.adminAuditLog.create({
-      data: {
-        AdminUser: actor.username.slice(0, 10),
-        Action: entry.action,
-        TargetType: entry.targetType,
-        Target: entry.target.slice(0, 50),
-        Reason: entry.reason?.trim().slice(0, 255) || null,
-        Details: entry.details ? JSON.stringify(entry.details) : null,
-        Ip: actor.ip?.slice(0, 45) ?? null,
-      },
-    });
+    return writeAdminAudit(this.prisma, actor, entry);
   }
 
   private accountStatus(code: string) {
