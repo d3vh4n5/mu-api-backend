@@ -12,6 +12,7 @@ import { SeedModule } from './modules/seed/seed.module';
 import { LauncherModule } from './modules/launcher/launcher.module';
 import { PlayersModule } from './modules/players/players.module';
 import { ServerResetModule } from './modules/tools/server-reset/server-reset.module';
+import { ClientPublishModule } from './modules/tools/client-publish/client-publish.module';
 import { AccountModule } from './modules/account/account.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { NewsModule } from './modules/news/news.module';
@@ -45,6 +46,7 @@ const devOnlyModules =
     LauncherModule,
     PlayersModule,
     ServerResetModule,
+    ClientPublishModule,
     AccountModule,
     AdminModule,
     NewsModule,

@@ -23,8 +23,10 @@ paso falla, el servicio queda detenido y el script lo informa.
 1. Hacer backup de `C:\API` completo (sobre todo `.env` y `public\`). El primer
    `git pull` **borra** del disco `public\index.html`,
    `public\downloads\Mu99bClassic\manifest.json`, `service.cjs` e `index.js`
-   (se reemplazan por los nuevos). Si falta `manifest.json`, la API sirve el
-   manifest embebido (`src/modules/launcher/data/manifest.ts`).
+   (se reemplazan por los nuevos). La API no tiene manifest de respaldo: si
+   falta `manifest.json`, `/downloads/Mu99bClassic/manifest.json` y
+   `/api/v2/launcher/manifest` responden 404 y los launchers no pueden
+   verificar. Se vuelve a publicar con Client Tools → "Publicar en servidor".
 2. Anotar del `.env` viejo: `PORT` y `API_KEY` (esta última pasa a ser
    `LAUNCHER_API_KEY`).
 3. Crear el `.env` nuevo a partir de `.env.example` (con `DATABASE_URL` en `localhost`).
@@ -56,6 +58,21 @@ curl -o NUL -w "%{http_code}" http://localhost:<PORT>/api/v2/seed
 ```
 
 El último debe dar `404`: en producción el seed no existe.
+
+El de `manifest.json` debe dar `200`. Si da `404`, ningún launcher puede
+verificar el cliente (la API no tiene manifest de respaldo): publicarlo enseguida
+desde Client Tools → "Publicar en servidor" (Comparar → Publicar). Conviene
+revisarlo **antes** de actualizar la API (que exista
+`public\downloads\Mu99bClassic\manifest.json`) para no dejar a los jugadores sin
+verificación en el medio.
+
+## Publicar el cliente
+
+Desde la PC del admin, con `tool.exe` → pestaña "Publicar en servidor" (ver
+`Launcher/readme.md`). Usa `SECRET_API_KEY` y endpoints
+`/api/v2/tools/client-publish` (ejemplos en `docs/client-publish.rest`). Los
+archivos esperan en `public\client-publish-staging\` hasta publicar; esa
+carpeta se limpia sola al iniciar la siguiente publicación.
 
 ## Publicar una versión del launcher
 

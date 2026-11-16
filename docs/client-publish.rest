@@ -1,0 +1,51 @@
+@baseUrl = {{$dotenv API_BASE_URL}}
+@apiKey = {{$dotenv SECRET_API_KEY}}
+
+# Publicar el cliente sin Escritorio Remoto. Normalmente lo usa Client Tools
+# (pestaña "Publicar en servidor"); esto es para probar a mano.
+# Flujo: state → sessions → PUT de cada archivo → publish.
+# Nada cambia para los jugadores hasta el publish (el manifest se escribe al final).
+
+### Archivos que hay hoy en Client/ (path, size, sha256)
+GET {{baseUrl}}/tools/client-publish/state
+x-api-key: {{apiKey}}
+
+### Abrir una sesión (409 si hay otra; force=true la descarta)
+# @name session
+POST {{baseUrl}}/tools/client-publish/sessions?force=false
+x-api-key: {{apiKey}}
+
+### Subir un archivo (body binario; x-sha256 = sha256 del contenido)
+# "abc" → ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+PUT {{baseUrl}}/tools/client-publish/sessions/{{session.response.body.sessionId}}/files?path=Data%2Fprueba.txt
+x-api-key: {{apiKey}}
+x-sha256: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+Content-Type: application/octet-stream
+
+abc
+
+### Publicar: aplica lo subido, borra y escribe manifest.json
+# El manifest tiene que listar TODOS los archivos del cliente, no solo lo subido.
+POST {{baseUrl}}/tools/client-publish/sessions/{{session.response.body.sessionId}}/publish
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "manifest": {
+    "version": "1.0.1",
+    "file_count": 1,
+    "files": [
+      {
+        "path": "Data/prueba.txt",
+        "size": 3,
+        "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+      }
+    ]
+  },
+  "delete": [],
+  "extraFiles": []
+}
+
+### Cancelar la sesión (borra lo subido sin publicar)
+DELETE {{baseUrl}}/tools/client-publish/sessions/{{session.response.body.sessionId}}
+x-api-key: {{apiKey}}

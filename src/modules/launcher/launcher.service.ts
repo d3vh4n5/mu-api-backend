@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { join } from 'path';
 import { HealthService } from '../health/health.service';
 import { getDownloadsDir } from '../../downloads/setup-downloads';
-import { manifest } from './data/manifest';
+import { readPublishedManifest } from './manifest-file';
 import { getPublishedFileInfo } from './published-file';
 import { LAUNCHER_REL_PATH, UPDATER_REL_PATH } from './paths';
 
@@ -42,8 +42,9 @@ export class LauncherService {
     return servers;
   }
 
+  /** El manifest publicado en disco: 404 si falta, 500 si está roto. */
   getManifest() {
-    return manifest;
+    return readPublishedManifest();
   }
 
   /**

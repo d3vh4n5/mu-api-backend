@@ -26,6 +26,10 @@ async function bootstrap() {
 
   app.use(helmet());
 
+  // El manifest del cliente (~4000 archivos, ~600 kB) supera el límite por
+  // defecto de 100 kB al publicar desde Client Tools.
+  app.useBodyParser('json', { limit: '5mb' });
+
   const blocklist = app.get(IpBlocklistService);
   app.use(blocklist.middleware());
 
