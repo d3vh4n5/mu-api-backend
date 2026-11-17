@@ -6,6 +6,14 @@ import { AppModule } from './app.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { IpBlocklistService } from './common/security/ip-blocklist.service';
 import { setupDownloads } from './downloads/setup-downloads';
+import {
+  attachGameBridge,
+  bridgeConfigFromEnv,
+} from './modules/game/game-bridge';
+import {
+  gameStaticDirsFromEnv,
+  setupGameStatic,
+} from './modules/game/setup-game-static';
 
 /** TRUST_PROXY: "true", número de saltos, o lista ("loopback", "127.0.0.1"). */
 function parseTrustProxy(value: string): boolean | number | string {
@@ -23,6 +31,10 @@ async function bootstrap() {
   if (process.env.TRUST_PROXY) {
     app.set('trust proxy', parseTrustProxy(process.env.TRUST_PROXY));
   }
+
+  // Versión web del juego (/jugar y /game/data): va antes del helmet global porque
+  // la página necesita su propia CSP (WebGL, blob:, WebSocket).
+  setupGameStatic(app, gameStaticDirsFromEnv(process.env));
 
   app.use(helmet());
 
@@ -55,5 +67,17 @@ async function bootstrap() {
       `Server is running on http://localhost:${port} (NODE_ENV=${process.env.NODE_ENV})`,
     );
   });
+
+  // Puente WebSocket ↔ TCP de la versión web del juego (/game/ws).
+  const gameLog = new Logger('Game');
+  const bridge = bridgeConfigFromEnv(process.env);
+  attachGameBridge(app.getHttpServer(), bridge, {
+    isBlocked: (ip) => blocklist.isBlocked(ip),
+    trustProxy: !!process.env.TRUST_PROXY,
+    log: (msg) => gameLog.log(msg),
+  });
+  gameLog.log(
+    `Puente del juego en /game/ws → ${bridge.host} puertos ${[...bridge.ports].join(', ')}`,
+  );
 }
 void bootstrap();
