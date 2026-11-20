@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { classNameOf } from '../account/game-rules';
 
 @Injectable()
 export class RankingService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getRanking() {
-    return this.prisma.$queryRaw<
+    const rows = await this.prisma.$queryRaw<
       {
         Name: string;
         Class: number | null;
@@ -26,6 +27,8 @@ export class RankingService {
         AND C.CtlCode = 0
       ORDER BY C.ResetCount DESC, C.cLevel DESC
     `;
+
+    return rows.map((row) => ({ ...row, className: classNameOf(row.Class) }));
   }
 
   findOne(id: number) {
