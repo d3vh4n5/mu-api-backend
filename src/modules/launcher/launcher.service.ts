@@ -6,6 +6,14 @@ import { readPublishedManifest } from './manifest-file';
 import { getPublishedFileInfo } from './published-file';
 import { LAUNCHER_REL_PATH, UPDATER_REL_PATH } from './paths';
 
+/** URL pública del front, sin barra final (FRONTEND_URL). */
+function frontendUrl(): string {
+  return (process.env.FRONTEND_URL || 'https://mucampana.com').replace(
+    /\/+$/,
+    '',
+  );
+}
+
 @Injectable()
 export class LauncherService {
   private readonly logger = new Logger(LauncherService.name);
@@ -29,7 +37,7 @@ export class LauncherService {
         name: 'Mu Campana 99b Classic',
         status: 'Online',
         fileUrl: '/downloads/Mu99bClassic/Client/ServerInfo.sse',
-        registerUrl: 'https://mu-front.vercel.app/register',
+        registerUrl: `${frontendUrl()}/register`,
       },
       // {
       //   id: 2,
@@ -79,8 +87,8 @@ export class LauncherService {
 
     return {
       name: 'launcher.exe',
-      registerUrl: 'https://mu-front.vercel.app/register',
-      frontEndUrl: 'https://mu-front.vercel.app',
+      registerUrl: `${frontendUrl()}/register`,
+      frontEndUrl: frontendUrl(),
       launcherUrl:
         process.env.MU_SERVER_URL + '/downloads/' + LAUNCHER_REL_PATH,
       launcherSha256: launcher?.sha256 ?? null,

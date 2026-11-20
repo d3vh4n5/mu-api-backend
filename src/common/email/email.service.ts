@@ -24,8 +24,8 @@ export class EmailService {
       const response: SendTransacEmailResponse =
         await this.brevoClient.transactionalEmails.sendTransacEmail({
           sender: {
-            name: 'Mu Campana Web',
-            email: 'no-reply-devhans@outlook.com',
+            name: process.env.MAIL_FROM_NAME || 'Mu Campana',
+            email: process.env.MAIL_FROM || 'no-reply@mucampana.com',
           },
           to: arrRecipients,
           subject: subject,
